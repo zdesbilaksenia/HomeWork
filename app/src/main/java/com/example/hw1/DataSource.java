@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataSource {
-    private static final DataSource ourInstance = new DataSource();
+    private static DataSource ourInstance = new DataSource();
 
     static DataSource getInstance() { return ourInstance; }
 
@@ -28,6 +28,7 @@ public class DataSource {
             list.add(new cellModel(number, col));
         }
     };
+
 
     public static class cellModel {
         public int mNum;

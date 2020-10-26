@@ -18,26 +18,37 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.Console;
 import java.util.List;
 
 public class Fragment1 extends Fragment {
+
+    int size = 0;
+    List<DataSource.cellModel> cells = DataSource.getInstance().getData();
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment1,container,false);
         RecyclerView recyclerView = rootView.findViewById(R.id.recycler);
-
-
-        List<DataSource.cellModel> cells = DataSource.getInstance().getData();
-        int currentOrientation = getResources().getConfiguration().orientation;
-        if (currentOrientation == Configuration.ORIENTATION_PORTRAIT) {
-            recyclerView.setLayoutManager(new GridLayoutManager(this.getContext(), 3));
-        } else {
-            recyclerView.setLayoutManager(new GridLayoutManager(this.getContext(), 4));
+        if (getArguments() != null) {
+            size = getArguments().getInt("size");
+            if (size != 0) {
+                int col = 0;
+                for (int i = 101; i <= size; i++) {
+                    if (i % 2 == 0) {
+                        col = Color.RED;
+                    } else {
+                        col = Color.CYAN;
+                    }
+                    cells.add(new DataSource.cellModel(i, col));
+                }
+            }
         }
+        int spanCount = getResources().getInteger(R.integer.column_counter);
+        recyclerView.setLayoutManager(new GridLayoutManager(this.getContext(), spanCount));
         myAdapter adapter = new myAdapter(cells);
         recyclerView.setAdapter(adapter);
-
         Button addButton = rootView.findViewById(R.id.addButton);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,8 +59,6 @@ public class Fragment1 extends Fragment {
 
         return rootView;
     }
-
-
 
     public  class myAdapter extends RecyclerView.Adapter<myViewHolder> {
 
@@ -121,7 +130,5 @@ public class Fragment1 extends Fragment {
             cell = itemView.findViewById(R.id.numButton);
         }
     }
-
-
 
 }
