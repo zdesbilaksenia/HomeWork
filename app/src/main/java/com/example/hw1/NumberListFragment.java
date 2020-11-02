@@ -1,13 +1,11 @@
 package com.example.hw1;
 
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
 
 import androidx.annotation.NonNull;
@@ -18,32 +16,24 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.Console;
 import java.util.List;
 
-public class Fragment1 extends Fragment {
+public class NumberListFragment extends Fragment {
 
-    int size = 0;
-    List<DataSource.cellModel> cells = DataSource.getInstance().getData();
-
+    DataSource data;
+    List<DataSource.cellModel> cells;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment1,container,false);
         RecyclerView recyclerView = rootView.findViewById(R.id.recycler);
-        if (getArguments() != null) {
-            size = getArguments().getInt("size");
-            if (size != 0) {
-                int col = 0;
-                for (int i = 101; i <= size; i++) {
-                    if (i % 2 == 0) {
-                        col = Color.RED;
-                    } else {
-                        col = Color.CYAN;
-                    }
-                    cells.add(new DataSource.cellModel(i, col));
-                }
-            }
+        if (savedInstanceState != null) {
+            int size = savedInstanceState.getInt("size");
+            data = new DataSource(size);
+            cells = data.getData();
+        } else {
+            data = new DataSource(100);
+            cells = data.getData();
         }
         int spanCount = getResources().getInteger(R.integer.column_counter);
         recyclerView.setLayoutManager(new GridLayoutManager(this.getContext(), spanCount));
@@ -58,6 +48,12 @@ public class Fragment1 extends Fragment {
         });
 
         return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("size", cells.size());
     }
 
     public  class myAdapter extends RecyclerView.Adapter<myViewHolder> {
@@ -111,7 +107,7 @@ public class Fragment1 extends Fragment {
         public void addFragment(int num){
             Bundle bundle = new Bundle();
             bundle.putInt("key", num);
-            Fragment2 window = new Fragment2();
+            NumberFragment window = new NumberFragment();
             window.setArguments(bundle);
             FragmentManager fragmentManager = getFragmentManager();
             assert fragmentManager != null;

@@ -17,17 +17,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
         if (getSupportFragmentManager().findFragmentByTag("Fr1") == null) {
-            Fragment1 window = new Fragment1();
-            if (savedInstanceState != null) {
-                window.setArguments(savedInstanceState);
-            }
+            NumberListFragment window = new NumberListFragment();
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment1Container, window, "Fr1").commit();
         }
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt("size", DataSource.getInstance().getData().size());
     }
 }

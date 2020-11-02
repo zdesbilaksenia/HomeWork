@@ -6,19 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataSource {
-    private static DataSource ourInstance = new DataSource();
-
-    static DataSource getInstance() { return ourInstance; }
 
     private final List<cellModel> list;
     public List<cellModel> getData(){
         return list;
     }
     
-    private DataSource() {
+    public DataSource(int size) {
         list = new ArrayList<>();
         int number = 0; int col = 0;
-        for (int i = 1; i <= 100; i++){
+        for (int i = 1; i <= size; i++){
             number = i;
             if (i%2==0) {
                 col = Color.RED;
@@ -28,7 +25,6 @@ public class DataSource {
             list.add(new cellModel(number, col));
         }
     };
-
 
     public static class cellModel {
         public int mNum;
